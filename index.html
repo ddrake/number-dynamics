@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>Number Dynamics</title>
+    <meta name="description" content="Dynamics arising from summing proper divisors">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="styles.css">
+    <script type="text/javascript" src="num_dyn.js"></script>
+    <style>
+      #controls {
+        width: 300px;
+        height: 4400px;
+        padding: 10px;
+        float: left;
+        background-color: #ddd;
+      }
+      #main {
+        height: 4400px;
+        padding: 10px;
+        float: left;
+        background-color: #555;
+      }
+      #tooltip {
+        position: absolute;
+        left: -1000px;
+        top: 0px;
+        width: 250px;
+        height: 20px;
+        font: 14px/18px Arial;
+        background-color: #fff;
+        color:#000;
+      }
+      #c0 { background-color: #FFFFFF; color: #000;}
+      #c1 { background-color: #000; color: #FFF;}
+      #c2 { background-color: #FFB300; color: #000;}
+      #c3 { background-color: #803E75; color: #000;}
+      #c4 { background-color: #FF6800; color: #000;}
+      #c5 { background-color: #A6BDD7; color: #000;}
+      #c6 { background-color: #C10020; color: #000;}
+      #c7 { background-color: #CEA262; color: #000;}
+      #c8 { background-color: #817066; color: #000;}
+      #c9 { background-color: #007D34; color: #fff;}
+      #c10 { background-color: #F6768E; color: #000;}
+      #c11 { background-color: #00538A; color: #fff;}
+      #c12 { background-color: #FF7A5C; color: #000;}
+      #c13 { background-color: #53377A; color: #fff;}
+      #c14 { background-color: #FF8E00; color: #000;}
+      #c15 { background-color: #B32851; color: #000;}
+      #c16 { background-color: #F4C800; color: #000;}
+      #c17 { background-color: #7F180D; color: #000;}
+      #c18 { background-color: #93AA00; color: #000;}
+      #c19 { background-color: #593315; color: #000;}
+      #c20 { background-color: #F13A13; color: #000;}
+      .c { width: 250px; font: 16px/30px Arial; margin: 0; border: 1px solid black; padding-left: 5px;}
+    </style>
+  </head>
+  <body>
+    <div id="controls">
+      <p>Attractors</p>
+      <p id="c0" class="c">Infinity</p>
+      <p id="c1" class="c">Prime ~ 1 ~ 0</p>
+      <p id="c2" class="c">perfect 6</p>
+      <p id="c3" class="c">perfect 28 (isolated)</p>
+      <p id="c4" class="c">perfect 496</p>
+      <p id="c5" class="c">perfect 8128</p>
+      <p id="c6" class="c">amicable pair 220, 284</p>
+      <p id="c7" class="c">amicable pair 1184, 1210</p>
+      <p id="c8" class="c">amicable pair 2620, 2924</p>
+      <p id="c9" class="c">amicable pair 5020, 5564</p>
+      <p id="c10" class="c">amicable pair 6232, 6368</p>
+      <p id="c11" class="c">amicable pair 10744, 10856</p>
+      <p id="c12" class="c">amicable pair 12285, 14595</p>
+      <p id="c13" class="c">amicable pair 17296, 18416</p>
+      <p id="c14" class="c">amicable pair 63020, 66928</p>
+      <p id="c15" class="c">amicable pair 66992, 67095</p>
+      <p id="c16" class="c">amicable pair 69615, 71145</p>
+      <p id="c17" class="c">amicable pair 76084, 79750</p>
+      <p id="c18" class="c">amicable pair 87633, 88730</p>
+      <p id="c19" class="c">sociable chain (5) 12496, 14288, 15472, 14536, 14264</p>
+      <p id="c20" class="c">sociable chain (28) 14316, 19116, 31704, 47616, 83328, ...</p>
+    </div>
+    <div id="main">
+      <canvas id="mycanvas" width="1008" height="4400"></canvas>
+    </div>
+    <div id="tooltip"></div>
+  </body>
+  <script type="text/javascript">num_dyn()</script> 
+</html>
