@@ -17,7 +17,7 @@ This plot revealed quite a bit of surprising structure.  Strong vertical white l
 
 ![Canvas image with 252 numbers per row](https://github.com/ddrake/number-dynamics/blob/master/numbersTo100k_1008perRow.png?raw=true "Vertical Lines")
 
-![Canvas image with 250 numbers per row](https://github.com/ddrake/number-dynamics/blob/master/numbersTo100k_1008perRow.png?raw=true "Slanted Lines")
+![Canvas image with 250 numbers per row](https://github.com/ddrake/number-dynamics/blob/master/numbersTo100k_1004perRow.png?raw=true "Slanted Lines")
 
 Color Assignments
 -----------------
