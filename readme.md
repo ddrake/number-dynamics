@@ -15,6 +15,10 @@ To make the process of checking all the integers for a given range reasonably ef
 
 This plot revealed quite a bit of surprising structure.  Strong vertical white lines appear on odd multiples of 6.  Checkerboard patterns, alternating between zero and infinite attractors, appear quite frequently.
 
+![Canvas image with 252 numbers per row](https://github.com/ddrake/number-dynamics/blob/master/numbersTo100k_1008perRow.png?raw=true "Vertical Lines")
+
+![Canvas image with 250 numbers per row](https://github.com/ddrake/number-dynamics/blob/master/numbersTo100k_1008perRow.png?raw=true "Slanted Lines")
+
 Color Assignments
 -----------------
 - 0    white   infinity
