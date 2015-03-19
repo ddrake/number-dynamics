@@ -13,7 +13,7 @@ Assigning the color black to zero, white to (probably) infinity and different co
 
 To make the process of checking all the integers for a given range reasonably efficient, before generating a sequence for an integer, we check an array/hash to see if the number has already been assigned a color/attractor, since it may be an element of a previously computed sequence.  We also check to see if a generated number is in our list of known attractors.
 
-This plot revealed quite a bit of surprising structure.  Strong vertical white lines appear on odd multiples of 6.  Checkerboard patterns, alternating between zero and infinite attractors, appear quite frequently.
+This plot revealed quite a bit of surprising structure.  Strong vertical white lines appear on odd multiples of 6.  Striped patterns, alternating between zero (typically odd numbers) and infinite attractors (typically even), appear quite frequently.
 
 ![Canvas image with 252 numbers per row](https://github.com/ddrake/number-dynamics/blob/master/numbersTo100k_1008perRow.png?raw=true "Vertical Lines")
 

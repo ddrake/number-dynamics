@@ -26,7 +26,7 @@
         position: absolute;
         left: -1000px;
         top: 0px;
-        width: 250px;
+        width: 350px;
         height: 20px;
         font: 14px/18px Arial;
         background-color: #fff;
@@ -35,10 +35,10 @@
       #c0 { background-color: #FFFFFF; color: #000;}
       #c1 { background-color: #000; color: #FFF;}
       #c2 { background-color: #FFB300; color: #000;}
-      #c3 { background-color: #803E75; color: #000;}
+      #c3 { background-color: #803E75; color: #FFF;}
       #c4 { background-color: #FF6800; color: #000;}
       #c5 { background-color: #A6BDD7; color: #000;}
-      #c6 { background-color: #C10020; color: #000;}
+      #c6 { background-color: #C10020; color: #FFF;}
       #c7 { background-color: #CEA262; color: #000;}
       #c8 { background-color: #817066; color: #000;}
       #c9 { background-color: #007D34; color: #fff;}
@@ -47,39 +47,40 @@
       #c12 { background-color: #FF7A5C; color: #000;}
       #c13 { background-color: #53377A; color: #fff;}
       #c14 { background-color: #FF8E00; color: #000;}
-      #c15 { background-color: #B32851; color: #000;}
+      #c15 { background-color: #B32851; color: #fff;}
       #c16 { background-color: #F4C800; color: #000;}
-      #c17 { background-color: #7F180D; color: #000;}
+      #c17 { background-color: #7F180D; color: #fff;}
       #c18 { background-color: #93AA00; color: #000;}
-      #c19 { background-color: #593315; color: #000;}
+      #c19 { background-color: #593315; color: #fff;}
       #c20 { background-color: #F13A13; color: #000;}
       .c { width: 250px; font: 16px/30px Arial; margin: 0; border: 1px solid black; padding-left: 5px;}
+      .c a { color: inherit;}
     </style>
   </head>
   <body>
     <div id="controls">
-      <p>Attractors</p>
-      <p id="c0" class="c">Infinity</p>
-      <p id="c1" class="c">Prime ~ 1 ~ 0</p>
-      <p id="c2" class="c">perfect 6</p>
-      <p id="c3" class="c">perfect 28 (isolated)</p>
-      <p id="c4" class="c">perfect 496</p>
-      <p id="c5" class="c">perfect 8128</p>
-      <p id="c6" class="c">amicable pair 220, 284</p>
-      <p id="c7" class="c">amicable pair 1184, 1210</p>
-      <p id="c8" class="c">amicable pair 2620, 2924</p>
-      <p id="c9" class="c">amicable pair 5020, 5564</p>
-      <p id="c10" class="c">amicable pair 6232, 6368</p>
-      <p id="c11" class="c">amicable pair 10744, 10856</p>
-      <p id="c12" class="c">amicable pair 12285, 14595</p>
-      <p id="c13" class="c">amicable pair 17296, 18416</p>
-      <p id="c14" class="c">amicable pair 63020, 66928</p>
-      <p id="c15" class="c">amicable pair 66992, 67095</p>
-      <p id="c16" class="c">amicable pair 69615, 71145</p>
-      <p id="c17" class="c">amicable pair 76084, 79750</p>
-      <p id="c18" class="c">amicable pair 87633, 88730</p>
-      <p id="c19" class="c">sociable chain (5) 12496, 14288, 15472, 14536, 14264</p>
-      <p id="c20" class="c">sociable chain (28) 14316, 19116, 31704, 47616, 83328, ...</p>
+      <p><a href="#">Attractors</a></p>
+      <p id="c0" class="c"><a href="#">Infinity ?</a></p>
+      <p id="c1" class="c"><a href="#">Prime ~ 1 ~ 0</a></p>
+      <p id="c2" class="c"><a href="#">perfect 6</a></p>
+      <p id="c3" class="c"><a href="#">perfect 28 (isolated)</a></p>
+      <p id="c4" class="c"><a href="#">perfect 496</a></p>
+      <p id="c5" class="c"><a href="#">perfect 8128</a></p>
+      <p id="c6" class="c"><a href="#">amicable pair 220, 284</a></p>
+      <p id="c7" class="c"><a href="#">amicable pair 1184, 1210</a></p>
+      <p id="c8" class="c"><a href="#">amicable pair 2620, 2924</a></p>
+      <p id="c9" class="c"><a href="#">amicable pair 5020, 5564</a></p>
+      <p id="c10" class="c"><a href="#">amicable pair 6232, 6368</a></p>
+      <p id="c11" class="c"><a href="#">amicable pair 10744, 10856</a></p>
+      <p id="c12" class="c"><a href="#">amicable pair 12285, 14595</a></p>
+      <p id="c13" class="c"><a href="#">amicable pair 17296, 18416</a></p>
+      <p id="c14" class="c"><a href="#">amicable pair 63020, 66928</a></p>
+      <p id="c15" class="c"><a href="#">amicable pair 66992, 67095</a></p>
+      <p id="c16" class="c"><a href="#">amicable pair 69615, 71145</a></p>
+      <p id="c17" class="c"><a href="#">amicable pair 76084, 79750</a></p>
+      <p id="c18" class="c"><a href="#">amicable pair 87633, 88730</a></p>
+      <p id="c19" class="c"><a href="#">sociable chain (5) 12496, 14288, 15472, 14536, 14264</a></p>
+      <p id="c20" class="c"><a href="#">sociable chain (28) 14316, 19116, 31704, 47616, 83328, ...</a></p>
     </div>
     <div id="main">
       <canvas id="mycanvas" width="1008" height="4400"></canvas>

@@ -8,7 +8,7 @@ function num_dyn() {
                  '#93AA00','#593315','#F13A13','#232C16'];
 
     var attractor_descriptions = [
-        "Infinity", "Prime ~ 1 ~ 0","perfect 6","perfect 28","perfect 496","perfect 8128",
+        "Infinity", "Prime -> 1 -> 0","perfect 6","perfect 28","perfect 496","perfect 8128",
         "amicable pair 220, 284","amicable pair 1184, 1210", "amicable pair 2620, 2924", 
         "amicable pair 5020, 5564","amicable pair 6232, 6368","amicable pair 10744, 10856",
         "amicable pair 12285, 14595","amicable pair 17296, 18416",
@@ -24,9 +24,7 @@ function num_dyn() {
     var line_width = 4;
     var height = 600;
     var ctx = canvas.getContext("2d");
-    ctx.fillStyle = "#FFFFFF"; 
     ctx.lineWidth = line_width 
-    ctx.fillRect(0,0,canv_width,canv_height);
 
     var line_top = function(n) {
         var row = Math.floor(n * line_width / canv_width);
@@ -61,6 +59,8 @@ function num_dyn() {
     };
 
     var plot_all = function() {
+        ctx.fillStyle = background_white ? "#FFF" : "#000"; 
+        ctx.fillRect(0,0,canv_width,canv_height);
         for (var i = 0; i < lookup.length; i++) {
             plot(i);
         };
@@ -68,21 +68,42 @@ function num_dyn() {
 
     var plot = function(n) {
         var pt = line_top(n);
-        ctx.strokeStyle = color[lookup[n]];
-        ctx.beginPath();
-        ctx.moveTo(pt.x, pt.y);
-        ctx.lineTo(pt.x, pt.y + line_height);
-        ctx.stroke();
+        var attractor = lookup[n];
+        if (is_attractor_shown[attractor]) 
+        {
+            ctx.strokeStyle = color[lookup[n]];
+            ctx.beginPath();
+            ctx.moveTo(pt.x, pt.y);
+            ctx.lineTo(pt.x, pt.y + line_height);
+            ctx.stroke();            
+        }
     }
 
     var attractor_info = function(n) {
-        return n ? attractor_descriptions[lookup[n]] : "";
+        var ln = lookup[n];
+        return n ? ln === 0 ? "Infinity? (" + attrval[n] + ")" :
+            ln === 1 ? "prime " + attrval[n] + " -> 1 -> 0" :
+            attractor_descriptions[lookup[n]] : "";
     }
 
 
     //----------------------------
     // user input
     //----------------------------
+
+    var is_attractor_shown = [true, true, true, true, true, true, true, true, true, true, 
+                              true, true, true, true, true, true, true, true, true, true, true];
+    var background_white = true;
+
+    var toggle_attractor = function(n) {
+        is_attractor_shown[n] = !is_attractor_shown[n];
+        plot_all();
+    }
+
+    var toggle_background = function() {
+        background_white = !background_white;
+        plot_all();
+    }
 
     canvas.onmousemove = function(e) {
         var tooltip = document.getElementById('tooltip');
@@ -95,7 +116,6 @@ function num_dyn() {
         else {
            tooltip.style.left = "-1000px";
         }        
-
         return true;
     };
 
@@ -104,6 +124,26 @@ function num_dyn() {
         tooltip.style.left = "-1000px";
     };
 
+    var controls = document.getElementById("controls");
+
+    function makeCallback(idx) {
+        return function() {
+            toggle_attractor(idx)           
+        };
+    }
+
+    controls.children[0].firstChild.onclick = toggle_background;
+
+    for (var i = 1; i < controls.children.length; i++) {
+        var p = controls.children[i];
+        var idx = parseInt(p.id.substring(1));
+        var callback = makeCallback(idx)      
+        p.firstChild.onclick = callback;
+    };
+
+
+
+
     //----------------------------
     // computation
     //----------------------------
@@ -111,6 +151,11 @@ function num_dyn() {
     var max_int = 10000000; // if a sequence exceeds this number, assume diverges to infinity
     var iter_inf = 40; // if a sequence exceeds this many steps without hitting an attractor, assume diverges to infinity
     var lookup = []; // global lookup table, index is the number, value is the attractor/color index (an integer)
+    // global attractor value array.  If the attractor is 1, this is the corresponding prime.
+    // if it is a pair or chain, it's the first element encountered, if it's "infinity" it's the largest number
+    // tested -- or 0 if we stopped due to max iterations.  We should alert on hitting max iterations, since that may
+    // indicate a new attractor.  
+    var attrval = [];
     // attractors[0] is null, a placeholder for infinity.
     // attractors[1] is 1 (equivalent to zero since 1 has 0 proper divisors)
     var attractors = [
@@ -121,24 +166,73 @@ function num_dyn() {
         [14316,19116,31704,47616,83328,177792,295488,629072,589786,294896,358336,418904,366556,274924,275444,
             243760,376736,381028,285778,152990,122410,97946,48976,45946,22976,22744,19916,17716]];
 
+    // var compute_all = function() {
+    //     for (var i = 0; i < range; i++) {
+    //         compute_number(i, 0, [])
+    //         var results = compute_number(i, 0, []);
+    //         var ns = results[0];
+    //         var ai = results[1];
+    //         update(ns, ai);
+    //     };
+    // }
+
+    var global_index = 0;
+
     var compute_all = function() {
-        for (var i = 0; i < range; i++) {
-            var results = compute_number(i, 0, []);
-            var ns = results[0];
-            var ai = results[1];
-            update(ns, ai);
-        };
+        add_attractors();
+        setTimeout(compute_next);
     }
 
-    // compute a number, returning a nested array with a sequence of numbers and an attractor index
+    var add_attractors = function() {
+        for (var i = 1; i < attractors.length; i++) {
+            for (var j = 0; j < attractors[i].length; j++) {
+                n = attractors[i][j];
+                attrval[n] = n;
+                lookup[n] = i;
+                plot(n);
+            }
+        }
+    }
+
+    var compute_next = function() {
+        var results = compute_number(global_index, 0, []);
+        var ns = results[0];
+        var code = results[1];
+        var last = results[2];
+        if (code < 0) {  // new attractor
+            alert("Found a new attractor: " + last);
+            attrval[global_index] = last;
+            lookup[global_index] = -1;
+        } 
+        else if (code === 0) {  // infinity?
+            attrval[global_index] = last;
+            lookup[global_index] = 0;
+        }
+        else if (code === 1) {  // known attractor 
+            var ai = attractor_index(last);
+            var aa = attractors[ai];
+            attrval[global_index] = ns.length > 1 ? ns[ns.length - 1] : last; 
+            lookup[global_index] = last;
+        }
+        else {  // already in the lookup
+            attrval[global_index] = ns.length > 1 ? ns[ns.length - 1] : last;
+            lookup[global_index] = lookup[last];
+        }
+        update(ns, lookup[global_index], last);
+        global_index += 1;
+        if (global_index < range) setTimeout(compute_next);
+    }
+
+    // compute a number, returning a nested array with sequence of new tested numbers 
+    // a code for the type of attractor, and the "last number" for display
     var compute_number = function(n, depth, ns) {
         var li = lookup[n];
         if (li === undefined) {
             var ai = attractor_index(n);
             if (ai === null) {
-                if (depth >= iter_inf || n > max_int) {  // assume divergent
-                    ns.push(n);
-                    return [ns, 0];
+                if (ns.indexOf(n, 0) >= 0) return [ns, -1, n]  // new attractor
+                else if (n > max_int) {  // infinity?
+                   return [ns, 0, ns[ns.length - 1]];
                 } 
                 else  {
                     ns.push(n);
@@ -148,17 +242,13 @@ function num_dyn() {
                     return compute_number(next, depth+1, ns);                    
                 }
             } 
-            else  {   // we reached one of the attractors so add all for the attractor array
-                var aa = attractors[ai];
-                for (var i = 0; i < aa.length; i++) {
-                    ns.push(aa[i]);
-                }
-                return [ns, ai];
+            else {
+                return [ns, 1, n]; // hit attractor                  
             }
         }
-        else  {  // we reached a number that is in the lookup
-            return [ns,li];
-        }
+        else {
+            return [ns, 2, n]; // hit an elem of lookup
+        } 
     }
 
     var attractor_index = function(n)  {
@@ -171,10 +261,12 @@ function num_dyn() {
         return null;
     }
 
-    var update = function(ns, ai) {
-        for (var i = 0; (i < ns.length && ns[i] < range); i++) {
+    var update = function(ns, attr_idx, attr_val) {
+         for (var i = 0; (i < ns.length && ns[i] < range); i++) {
             var n = ns[i];
-            lookup[n] = ai;
+            lookup[n] = attr_idx;
+            attr_val[n] = attr_val;
+            plot(n);
         }
     }
 
@@ -189,7 +281,9 @@ function num_dyn() {
         return sum;
     }
 
+
     compute_all();
-    plot_all();
+    //plot_all();
+    window.lookup = lookup;
 } 
 
