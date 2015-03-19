@@ -207,54 +207,59 @@ function num_dyn() {
             attrval[global_index] = last;
             lookup[global_index] = -1;
         } 
-        else if (code === 0) {  // infinity?
+        else if (code === 0) {  // new infinity?
             attrval[global_index] = last;
             lookup[global_index] = 0;
         }
-        else if (code === 1) {  // known attractor 
+        else if (code === 1) {  // known non-infinite attractor 
             var ai = attractor_index(last);
-            var aa = attractors[ai];
-            attrval[global_index] = ns.length > 1 ? ns[ns.length - 1] : last; 
-            lookup[global_index] = last;
+            attrval[global_index] = ns.length > 0 ? ns[ns.length - 1] : last; 
+            lookup[global_index] = ai;
         }
-        else {  // already in the lookup
-            attrval[global_index] = ns.length > 1 ? ns[ns.length - 1] : last;
+        else {  // value already in the lookup
+            attrval[global_index] = attrval[last];
             lookup[global_index] = lookup[last];
         }
-        update(ns, lookup[global_index], last);
+        update(ns, lookup[global_index], attrval[global_index]);
         global_index += 1;
         if (global_index < range && is_running) setTimeout(compute_next);
     }
 
-    // compute a number, returning a nested array with sequence of new tested numbers 
-    // a code for the type of attractor, and the "last number" for display
+    // compute a number, returning a nested array with a sequence of new tested numbers,
+    // a code for the return type and the "last number" for display
     var compute_number = function(n, depth, ns) {
         var li = lookup[n];
         if (li === undefined) {
-            var ai = attractor_index(n);
-            if (ai === null) {
-                if (ns.indexOf(n, 0) >= 0) return [ns, -1, n]  // new attractor
-                else if (n > max_int) {  // infinity?
-                   return [ns, 0, ns[ns.length - 1]];
-                } 
-                else  {
-                    ns.push(n);
-                    // compute the sum of the number's proper divisors 
-                    var next = sum_of_proper_divisors(n);
-                    // recursively check that result
-                    return compute_number(next, depth+1, ns);                    
-                }
+            if (ns.indexOf(n, 0) >= 0) return [ns, -1, n]  // new attractor
+            else if (n > max_int) {  // infinity?
+               return [ns, 0, n];
             } 
-            else {
-                return [ns, 1, n]; // hit attractor                  
+            else  {
+                ns.push(n);
+                // compute the sum of the number's proper divisors 
+                var next = sum_of_proper_divisors(n);
+                // recursively check that result
+                return compute_number(next, depth+1, ns);                    
             }
         }
         else {
-            return [ns, 2, n]; // hit an elem of lookup
-        } 
+            if (li > 0 && is_attractor(li,n)) return [ns, 1, n] // reached a non-infinite attractor
+            else return [ns, 2, n]; // hit some other element of lookup
+        }
     }
 
-    var attractor_index = function(n)  {
+    // i > 0
+    var is_attractor = function(i, n)  {
+        var aa = attractors[i];
+        for (var j = 0; j < aa.length; j++) {
+            if (aa[j] === n) {
+                return true;
+            }       
+        }
+        return false;
+    }
+
+     var attractor_index = function(n) {
         for (var i = 1; i < attractors.length; i++) {
             var aa = attractors[i];
             for (var j = 0; j < aa.length; j++) {
@@ -263,6 +268,7 @@ function num_dyn() {
         }
         return null;
     }
+
 
     var update = function(ns, attr_idx, attr_val) {
          for (var i = 0; (i < ns.length && ns[i] < range); i++) {
