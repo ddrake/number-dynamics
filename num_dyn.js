@@ -105,6 +105,13 @@ function num_dyn() {
         plot_all();
     }
 
+    var toggle_playpause = function() {
+        var btn = document.getElementById('playpause');
+        is_running = !is_running;
+        btn.innerHTML = is_running ? "Pause" : "Resume";
+        if (is_running) resume();
+    }
+
     canvas.onmousemove = function(e) {
         var tooltip = document.getElementById('tooltip');
         var number = number_at_point(e.pageX, e.pageY);
@@ -132,9 +139,10 @@ function num_dyn() {
         };
     }
 
-    controls.children[0].firstChild.onclick = toggle_background;
+    controls.children[0].children[0].onclick = toggle_playpause;
+    controls.children[1].children[0].onclick = toggle_background;
 
-    for (var i = 1; i < controls.children.length; i++) {
+    for (var i = 2; i < controls.children.length; i++) {
         var p = controls.children[i];
         var idx = parseInt(p.id.substring(1));
         var callback = makeCallback(idx)      
@@ -166,20 +174,15 @@ function num_dyn() {
         [14316,19116,31704,47616,83328,177792,295488,629072,589786,294896,358336,418904,366556,274924,275444,
             243760,376736,381028,285778,152990,122410,97946,48976,45946,22976,22744,19916,17716]];
 
-    // var compute_all = function() {
-    //     for (var i = 0; i < range; i++) {
-    //         compute_number(i, 0, [])
-    //         var results = compute_number(i, 0, []);
-    //         var ns = results[0];
-    //         var ai = results[1];
-    //         update(ns, ai);
-    //     };
-    // }
-
     var global_index = 0;
+    var is_running = true;
 
     var compute_all = function() {
         add_attractors();
+        setTimeout(compute_next);
+    }
+
+    var resume = function() {
         setTimeout(compute_next);
     }
 
@@ -220,7 +223,7 @@ function num_dyn() {
         }
         update(ns, lookup[global_index], last);
         global_index += 1;
-        if (global_index < range) setTimeout(compute_next);
+        if (global_index < range && is_running) setTimeout(compute_next);
     }
 
     // compute a number, returning a nested array with sequence of new tested numbers 
@@ -265,7 +268,7 @@ function num_dyn() {
          for (var i = 0; (i < ns.length && ns[i] < range); i++) {
             var n = ns[i];
             lookup[n] = attr_idx;
-            attr_val[n] = attr_val;
+            attrval[n] = attr_val;
             plot(n);
         }
     }
