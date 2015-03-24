@@ -5,7 +5,7 @@ function num_dyn() {
     //----------------------------
     var color = ['#FFFFFF','#000000','#FFB300','#803E75','#FF6800','#A6BDD7','#C10020','#CEA262','#817066',
                  '#007D34','#F6768E','#00538A','#FF7A5C','#53377A','#FF8E00','#B32851','#F4C800','#7F180D',
-                 '#93AA00','#593315','#F13A13','#232C16'];
+                 '#93AA00','#593315','#F13A13','#232C16','235588'];
 
     var attractor_descriptions = [
         "Infinity", "Prime -> 1 -> 0","perfect 6","perfect 28","perfect 496","perfect 8128",
@@ -14,8 +14,13 @@ function num_dyn() {
         "amicable pair 12285, 14595","amicable pair 17296, 18416",
         "amicable pair 63020, 66928","amicable pair 66992, 67095","amicable pair 69615, 71145",
         "amicable pair 76084, 79750","amicable pair 87633, 88730",
-        "sociable chain (5) 12496...","sociable chain (28) 14316..."];
+        "sociable chain (5) 12496...","sociable chain (28) 14316...", "amicable pair 185368, 203432",
+        "amicable pair 879712, 901424"];
 
+    var gray = "#555";
+    var black = "#000";
+    var white = "#fff";
+    var background_color = gray;
     var canvas = document.getElementById("mycanvas");
     var canv_width = 1008;
     var canv_height = 4400;
@@ -59,7 +64,7 @@ function num_dyn() {
     };
 
     var plot_all = function() {
-        ctx.fillStyle = background_white ? "#FFF" : "#000"; 
+        ctx.fillStyle = background_color; 
         ctx.fillRect(0,0,canv_width,canv_height);
         for (var i = 0; i < lookup.length; i++) {
             plot(i);
@@ -88,71 +93,6 @@ function num_dyn() {
 
 
     //----------------------------
-    // user input
-    //----------------------------
-
-    var is_attractor_shown = [true, true, true, true, true, true, true, true, true, true, 
-                              true, true, true, true, true, true, true, true, true, true, true];
-    var background_white = true;
-
-    var toggle_attractor = function(n) {
-        is_attractor_shown[n] = !is_attractor_shown[n];
-        plot_all();
-    }
-
-    var toggle_background = function() {
-        background_white = !background_white;
-        plot_all();
-    }
-
-    var toggle_playpause = function() {
-        var btn = document.getElementById('playpause');
-        is_running = !is_running;
-        btn.innerHTML = is_running ? "Pause" : "Resume";
-        if (is_running) resume();
-    }
-
-    canvas.onmousemove = function(e) {
-        var tooltip = document.getElementById('tooltip');
-        var number = number_at_point(e.pageX, e.pageY);
-        if (number) {
-            tooltip.innerHTML = "" + number + " -> " + attractor_info(number);
-            tooltip.style.top = (e.pageY - 20) + "px";
-            tooltip.style.left = (e.pageX + 10) + "px";
-        } 
-        else {
-           tooltip.style.left = "-1000px";
-        }        
-        return true;
-    };
-
-    canvas.onmouseout = function(e) {
-        var tooltip = document.getElementById('tooltip')
-        tooltip.style.left = "-1000px";
-    };
-
-    var controls = document.getElementById("controls");
-
-    function makeCallback(idx) {
-        return function() {
-            toggle_attractor(idx)           
-        };
-    }
-
-    controls.children[0].children[0].onclick = toggle_playpause;
-    controls.children[1].children[0].onclick = toggle_background;
-
-    for (var i = 2; i < controls.children.length; i++) {
-        var p = controls.children[i];
-        var idx = parseInt(p.id.substring(1));
-        var callback = makeCallback(idx)      
-        p.firstChild.onclick = callback;
-    };
-
-
-
-
-    //----------------------------
     // computation
     //----------------------------
     var range = 100000; // max integer to compute and store
@@ -172,7 +112,8 @@ function num_dyn() {
         [63020, 66928],[66992, 67095],[69615, 71145],[76084, 79750],[87633, 88730],
         [12496,14288,15472,14536,14264],
         [14316,19116,31704,47616,83328,177792,295488,629072,589786,294896,358336,418904,366556,274924,275444,
-            243760,376736,381028,285778,152990,122410,97946,48976,45946,22976,22744,19916,17716]];
+            243760,376736,381028,285778,152990,122410,97946,48976,45946,22976,22744,19916,17716],
+        [185368,203432],[879712,901424]];
 
     var global_index = 0;
     var is_running = true;
@@ -289,10 +230,80 @@ function num_dyn() {
         }
         return sum;
     }
+    //----------------------------
+    // user input
+    //----------------------------
+
+    var is_attractor_shown = [true, true, true, true, true, true, true, true, true, true, 
+                              true, true, true, true, true, true, true, true, true, true, 
+                              true, true, true];
+
+    var toggle_attractor = function(n) {
+        is_attractor_shown[n] = !is_attractor_shown[n];
+        plot_all();
+    }
+
+    var cycle_background = function() {
+        if (background_color == gray) background_color = white;
+        else if (background_color == white) background_color = black;
+        else background_color = gray;
+        plot_all();
+    }
+
+    var toggle_playpause = function() {
+        var btn = document.getElementById('playpause');
+        is_running = !is_running;
+        btn.innerHTML = is_running ? "Pause" : "Resume";
+        if (is_running) resume();
+    }
+
+    canvas.onmousemove = function(e) {
+        var tooltip = document.getElementById('tooltip');
+        var number = number_at_point(e.pageX, e.pageY);
+        if (number) {
+            tooltip.innerHTML = "" + number + " -> " + attractor_info(number);
+            tooltip.style.top = (e.pageY - 20) + "px";
+            tooltip.style.left = (e.pageX + 10) + "px";
+        } 
+        else {
+           tooltip.style.left = "-1000px";
+        }        
+        return true;
+    };
+
+    canvas.onmouseout = function(e) {
+        var tooltip = document.getElementById('tooltip')
+        tooltip.style.left = "-1000px";
+    };
+
+    var controls = document.getElementById("controls");
+
+    function makeCallback(idx) {
+        return function() {
+            toggle_attractor(idx)           
+        };
+    }
+
+    function copyToClipboard() {
+      window.prompt("Copy to clipboard: Ctrl+C, Enter", lookup.join(","));
+    }
+
+    controls.children[0].children[0].onclick = toggle_playpause;
+    controls.children[1].children[0].onclick = copyToClipboard;
+    controls.children[2].children[0].onclick = cycle_background;
+
+    for (var i = 3; i < controls.children.length; i++) {
+        var p = controls.children[i];
+        var idx = parseInt(p.id.substring(1));
+        var callback = makeCallback(idx)      
+        p.firstChild.onclick = callback;
+    };
+
+
+
+
 
 
     compute_all();
-    //plot_all();
-    window.lookup = lookup;
 } 
 
